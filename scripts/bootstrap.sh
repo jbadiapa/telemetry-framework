@@ -26,7 +26,7 @@ pushd working
         echo "  -- apply components.yml patch"
 	echo "  -- dir ${_TOPDIR}"
 	ls -l $_TOPDIR/patches/components.yml.patch
-        patch -p1 < $_TOPDIR/patches/components.yml.patch > /dev/null 2>&1
+        patch -p1 < $_TOPDIR/patches/components.yml.patch 
 
         echo "  -- link playbooks"
         pushd playbooks
