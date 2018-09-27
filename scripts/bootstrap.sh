@@ -10,6 +10,7 @@ if [ ! -d working ]; then
     mkdir working
 fi
 
+PATCH_EXISTS=`type patch 2>/dev/null | wc -l`
 pushd working
 
     echo "-- Clone base-infra-bootstrap"
@@ -24,10 +25,13 @@ pushd working
     echo "-- Overlay telemetry-framework on openshift-ansible"
     pushd openshift-ansible
         echo "  -- apply components.yml patch"
-	echo "  -- dir ${_TOPDIR}"
-	ls -l $_TOPDIR/patches/components.yml.patch
-        patch -p1 < $_TOPDIR/patches/components.yml.patch 
-
+        echo "  -- dir ${_TOPDIR}"
+        ls -l $_TOPDIR/patches/components.yml.patch
+        if [ $PATCH_EXISTS -eq 1 ]; then
+          patch -p1 < $_TOPDIR/patches/components.yml.patch
+        else
+          git apply $_TOPDIR/patches/components.yml.patch
+        fi
         echo "  -- link playbooks"
         pushd playbooks
         cp -r $_TOPDIR/playbooks/* ./
